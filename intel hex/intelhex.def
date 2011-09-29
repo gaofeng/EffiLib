@@ -1,0 +1,7 @@
+LIBRARY	"intelHex"
+EXPORTS
+	IntelHexFileInput @1
+	IntelHexFileFillEmptyValue @2
+	IntelHexFileMerge @3
+	IntelHexFileOutput @4
+	IntelHexFileToBin @5

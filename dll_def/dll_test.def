@@ -1,0 +1,4 @@
+LIBRARY	"dll_def"
+EXPORTS
+	sum @1
+
