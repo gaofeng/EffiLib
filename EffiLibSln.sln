@@ -13,6 +13,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_def", "dll_def\dll_def.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exec", "exec\exec.vcproj", "{228C9750-9A2A-403B-B6C2-1ADFC0E1BFCE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua_capi", "lua_capi\lua_capi.vcproj", "{F0FD6687-3E99-49FA-8664-02D8DB5CB5C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lua", "Lua", "{152722EB-A25D-43B3-BFA3-91B1722C1DFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -39,11 +43,16 @@ Global
 		{228C9750-9A2A-403B-B6C2-1ADFC0E1BFCE}.Debug|Win32.Build.0 = Debug|Win32
 		{228C9750-9A2A-403B-B6C2-1ADFC0E1BFCE}.Release|Win32.ActiveCfg = Release|Win32
 		{228C9750-9A2A-403B-B6C2-1ADFC0E1BFCE}.Release|Win32.Build.0 = Release|Win32
+		{F0FD6687-3E99-49FA-8664-02D8DB5CB5C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0FD6687-3E99-49FA-8664-02D8DB5CB5C1}.Debug|Win32.Build.0 = Debug|Win32
+		{F0FD6687-3E99-49FA-8664-02D8DB5CB5C1}.Release|Win32.ActiveCfg = Release|Win32
+		{F0FD6687-3E99-49FA-8664-02D8DB5CB5C1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B978F0F7-EB75-4289-B8DD-C1D804BE0696} = {43E372FA-1D08-41E2-9273-F799788561A0}
+		{F0FD6687-3E99-49FA-8664-02D8DB5CB5C1} = {152722EB-A25D-43B3-BFA3-91B1722C1DFF}
 	EndGlobalSection
 EndGlobal
