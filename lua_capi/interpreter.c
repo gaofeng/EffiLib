@@ -47,9 +47,9 @@ int  main(void)
     luaL_openlibs(L); /*  opens  the  standard  libraries  */
 
     /*Run Lua Simple Interpreter*/
-    //RunInterpreter(L);
+    RunInterpreter(L);
 
-    loadWindowConfig(L, "win_size.lua", &w, &h);
+    //loadWindowConfig(L, "win_size.lua", &w, &h);
 
     lua_close(L);
     return  0;
