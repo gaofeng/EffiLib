@@ -172,6 +172,10 @@
 			RelativePath=".\interpreter.c"
 			>
 		</File>
+		<File
+			RelativePath=".\win_size.lua"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
