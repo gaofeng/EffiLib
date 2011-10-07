@@ -54,6 +54,7 @@ static int l_HexToBin(lua_State* L)
 		IntelHexFileFillEmptyValue(ihf, 0xFF);
 		/*输出到BIN格式*/
 		result = IntelHexFileToBin(ihf, bin_file);
+		free(ihf);
 	}
 	if (top == 1)
 	{
@@ -65,12 +66,52 @@ static int l_HexToBin(lua_State* L)
 
 static int l_HexMerge(lua_State* L)
 {
+	int top = 0;
+	const char* src1 = NULL;
+	const char* src2 = NULL;
+	const char* dest = NULL;
+	IntelHexFormat* ihf1 = NULL;
+	IntelHexFormat* ihf2 = NULL;
 
+	top = lua_gettop(L);
+	if ((top == 3) && 
+		(lua_isstring(L, -1) == 1) && 
+		(lua_isstring(L, -2) == 1) &&
+		(lua_isstring(L, -3) == 1))
+	{
+		src1 = lua_tostring(L, -3);
+		src2 = lua_tostring(L, -2);
+		dest = lua_tostring(L, -1);
+	}
+	else
+	{
+		luaL_error(L, "Wrong Arguments.");
+		return 0;
+	}
+	ihf1 = IntelHexFileInput(src1);
+	if (ihf1 == NULL)
+	{
+		return 0;
+	}
+	ihf2 = IntelHexFileInput(src2);
+	if (ihf2 == NULL)
+	{
+		return 0;
+	}
+	if (IntelHexFileMerge(ihf1, ihf2) == TRUE)
+	{
+		IntelHexFileOutput(ihf1, dest);
+	}
+	free(ihf1);
+	free(ihf2);
+	lua_pushboolean(L, TRUE);
+	return 1;
 }
 
 static const luaL_reg IntelHexFunctions[]=
 {
 	{"HexToBin",l_HexToBin},
+	{"HexMerge",l_HexMerge},
 	{NULL,NULL}
 };
 

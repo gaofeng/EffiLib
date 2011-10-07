@@ -473,7 +473,7 @@ static bool ParseOneLine(struct IntelHexFormat* hex_file, u32 line_no, u8* str)
 /*
 Read in a intel hex format file into internal. return TRUE if success.
 */
-IntelHexFormat* IntelHexFileInput(u8* file_name)
+IntelHexFormat* IntelHexFileInput(const u8* file_name)
 {
     FILE* fp = NULL;
     u32 lineno = 0;
