@@ -11,6 +11,14 @@
 
 int main(int argc, char *argv[])
 {
+	IntelHexFormat* ihf = NULL;
+	ihf = IntelHexFileInput("dw732.hex");
+	IntelHexFileToBin(ihf, "out.bin");
+	return 0;
+}
+
+int maintest(int argc, char *argv[])
+{
     IntelHexFormat* ihf1 = NULL;
     IntelHexFormat* ihf2 = NULL;
     u32 bin_size = 0;
