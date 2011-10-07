@@ -57,7 +57,7 @@ DWORD ExecCreateProcess(const char* command_str, char** result)
 
 	runcmd=StringInit();
 	runcmd=StringSet(runcmd, command_str);
-	runcmd=StringInsert (runcmd,"c://windows//system32//cmd.exe /c ",0);
+	//runcmd=StringInsert (runcmd,"c://windows//system32//cmd.exe /c ",0);
 
     hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -69,6 +69,7 @@ DWORD ExecCreateProcess(const char* command_str, char** result)
 
     if (CreateProcess(NULL, runcmd, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
     {
+		printf("Excuting \"%s...\"\n", runcmd);
         WaitForSingleObject(pi.hProcess, INFINITE);
         GetExitCodeProcess(pi.hProcess, &ExitCode);
         CloseHandle(pi.hThread);
@@ -76,7 +77,8 @@ DWORD ExecCreateProcess(const char* command_str, char** result)
     }
     else
     {
-        MessageBox(NULL, "The process could not be started...", NULL, MB_OK);
+        //MessageBox(NULL, "The process could not be started...", NULL, MB_OK);
+		printf("The process could not be started.\n");
 		CloseHandle(hWrite);
 		free(runcmd);
 		return 0;
@@ -111,13 +113,14 @@ static int l_ExecCreateProcess(lua_State* L)
 	}
 	else
 	{
+		luaL_error(L, "The first argument must be a command string.");
 		return 0;
 	}
 
 	ret = ExecCreateProcess(cmd, &result);
 	if (ret == 0)
 	{
-		return 0;
+		result = NULL;
 	}
 	//·µ»Ø½á¹û
 	lua_pushstring(L, result);
