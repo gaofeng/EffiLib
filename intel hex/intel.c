@@ -155,6 +155,10 @@ static bool AddBlock(struct IntelHexFormat* hex_file, u32 address, u8* data, u32
             add_block->Next = new_block;
             add_block = new_block->Next;
         }
+		while ((hex_file->BlockTail) && (hex_file->BlockTail->Next))
+		{
+			hex_file->BlockTail = hex_file->BlockTail->Next;
+		}
     }
 
     return TRUE;
@@ -481,11 +485,12 @@ IntelHexFormat* IntelHexFileInput(u8* file_name)
 		printf("Error: Not enough Memory.\n");
 		return NULL;
 	}
+	memset(hex_file, 0x00, sizeof(struct IntelHexFormat));
 
     fp = fopen(file_name, "r");
     if (fp == NULL)
     {
-        printf("Can't open file %s.\n", file_name);
+        printf("Can't open file %s when read hex file.\n", file_name);
         return NULL;
     }
     hex_file->FileMode = MODE_LINEAR;
@@ -744,7 +749,7 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, u8* hex_path)
 If hex file has multi data section, then will output several bin file, and from the second file, it's
 name will append start address.
 */
-bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* bin_file_path)
+bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* file_path)
 {
     FILE* fp = NULL;
     u8 addr_str[9];
@@ -753,14 +758,23 @@ bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* bin_file_path)
     u32 current_addr;
     bool first_block = TRUE;
     u8* period = NULL;
+	u8* bin_file_path = NULL;
     
+	bin_file_path = malloc(strlen(file_path) + 8 + 1);
+	if (bin_file_path == NULL)
+	{
+		fprintf(stdout, "Error: Not enough memory.\n");
+		return FALSE;
+	}
+	strcpy(bin_file_path, file_path);
     fp = fopen(bin_file_path, "wb");
     if (fp == NULL)
     {
-        fprintf(stdout, "Can't open file %s", bin_file_path);
+        fprintf(stdout, "Can't create file %s", bin_file_path);
+		free(bin_file_path);
         return FALSE;
     }
-
+	fprintf(stdout, "Output file %s created.\n", bin_file_path);
 
     current = ihf->BlockHead;
 
@@ -771,7 +785,8 @@ bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* bin_file_path)
             start_addr = current->Address;
             current_addr = current->Address;
             first_block = FALSE;
-        }
+			fprintf(stdout, "Start Address: 0x%0*X\n", 8, start_addr);
+		}
         /*Start a new data section*/
         if (current_addr != current->Address)
         {
@@ -787,14 +802,18 @@ bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* bin_file_path)
             if ((fp = fopen(bin_file_path, "wb")) == NULL)
             {
                 fprintf(stdout, "Can't create file %s\n", bin_file_path);
+				free(bin_file_path);
                 return FALSE;
             }
+			fprintf(stdout, "Output file %s created.\n", bin_file_path);
+			first_block = FALSE;
         }
         fwrite(current->Data, 1, current->Length, fp);
         current_addr = current->Address + current->Length;
         current = current->Next;
     }
     fclose(fp);
+	free(bin_file_path);
     return TRUE;
 }
 
