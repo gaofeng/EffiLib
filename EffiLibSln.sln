@@ -25,6 +25,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_export", "dll_export\dl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylib", "lua_mylib\mylib.vcproj", "{710FC04C-127F-4B0B-8033-516D59AE7E59}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C08D929E-AD7B-492A-A802-43CE4EF150AB}"
+	ProjectSection(SolutionItems) = preProject
+		Plans.txt = Plans.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

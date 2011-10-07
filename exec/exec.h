@@ -2,4 +2,4 @@
 
 void ExecWinExec(LPCSTR cmd);
 
-DWORD ExecCreateProcess(WCHAR* command_str);
+DWORD ExecCreateProcess(const char* command_str, char** result);

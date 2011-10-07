@@ -1,5 +1,11 @@
 #include <stdio.h>
+
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+
 #include "exec.h"
+#include "stringbuffer.h"
 
 void ExecWinExec(LPCSTR cmd)
 {
@@ -28,7 +34,7 @@ void ExecWinExec(LPCSTR cmd)
     }
 }
 
-DWORD ExecCreateProcess(WCHAR* command_str)
+DWORD ExecCreateProcess(const char* command_str, char** result)
 {
     PROCESS_INFORMATION pi;
     STARTUPINFO si;
@@ -38,24 +44,30 @@ DWORD ExecCreateProcess(WCHAR* command_str)
     char buffer[4096] = {0};
     DWORD bytesRead;
     DWORD ExitCode = ERROR;
+	char* runcmd;
 
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.lpSecurityDescriptor = NULL;
     sa.bInheritHandle = TRUE;
-    if (!CreatePipe(&hRead,&hWrite,&sa,0)) {
+    if (!CreatePipe(&hRead,&hWrite,&sa,0))
+	{
         printf("Error On CreatePipe()");
         return ERROR;
     }
 
+	runcmd=StringInit();
+	runcmd=StringSet(runcmd, command_str);
+	runcmd=StringInsert (runcmd,"c://windows//system32//cmd.exe /c ",0);
+
     hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
     ZeroMemory(&si, sizeof(si));
-    si.cb=sizeof(si);
-    si.wShowWindow=SW_SHOW;
-    si.dwFlags=STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+    si.cb = sizeof(si);
+    si.wShowWindow = SW_SHOW;
+    si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
     si.hStdOutput = hWrite;
 
-    if (CreateProcess(NULL, command_str, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi))
+    if (CreateProcess(NULL, runcmd, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
     {
         WaitForSingleObject(pi.hProcess, INFINITE);
         GetExitCodeProcess(pi.hProcess, &ExitCode);
@@ -64,18 +76,63 @@ DWORD ExecCreateProcess(WCHAR* command_str)
     }
     else
     {
-        MessageBox(NULL, L"The process could not be started...", NULL, MB_OK);
+        MessageBox(NULL, "The process could not be started...", NULL, MB_OK);
+		CloseHandle(hWrite);
+		free(runcmd);
+		return 0;
     }
     CloseHandle(hWrite);
-
+	*result = StringInit();
 
     while (TRUE) 
     {
-        if (ReadFile(hRead,buffer,4095,&bytesRead,NULL) == TRUE)
+        if (ReadFile(hRead, buffer, 4095, &bytesRead, NULL) == FALSE)
         {
-            printf(buffer);
             break;
         }
+		*result = StringAppent(*result, buffer);
+		memset(buffer,0,4096);
     }
+
     return ExitCode;
+}
+
+static int l_ExecCreateProcess(lua_State* L)
+{
+	int top = 0;
+	const char* cmd = NULL;
+	char* result = NULL;
+	DWORD ret = 0;
+
+	top = lua_gettop(L);
+	if ((top == 1) && (lua_isstring(L, -1) == 1))
+	{
+		cmd = lua_tostring (L,-1);
+	}
+	else
+	{
+		return 0;
+	}
+
+	ret = ExecCreateProcess(cmd, &result);
+	if (ret == 0)
+	{
+		return 0;
+	}
+	//·µ»Ø½á¹û
+	lua_pushstring(L, result);
+	free(result);
+	return 1;
+}
+
+static const luaL_reg ExecFunctions[]=
+{
+	{"ExecCP",l_ExecCreateProcess},
+	{NULL,NULL}
+};
+
+int __declspec(dllexport) luaopen_exec(lua_State* L)
+{
+	luaL_openlib(L,"exec",ExecFunctions,0);
+	return 1;
 }

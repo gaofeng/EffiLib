@@ -4,10 +4,11 @@
 
 int main(void)
 {
-    UINT result = 0;
-    WCHAR command_string[100];
+    //WCHAR command_string[100];
     DWORD exit_code;
-    wcscpy(command_string, L"git.exe");
+    //wcscpy(command_string, L"notepad.exe");
     //ExecWinExec("ping 10.5.1.1 -t");
-    exit_code = ExecCreateProcess(command_string);
+	char* result = NULL;
+    exit_code = ExecCreateProcess("C:\\Program Files\\Git\\bin\\git.exe", &result);
+	printf(result);
 }
