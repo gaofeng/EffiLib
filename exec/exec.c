@@ -69,7 +69,7 @@ DWORD ExecCreateProcess(const char* command_str, char** result)
 
     if (CreateProcess(NULL, runcmd, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
     {
-		printf("Excuting \"%s...\"\n", runcmd);
+		printf("Excuting \"%s\"\n", runcmd);
         WaitForSingleObject(pi.hProcess, INFINITE);
         GetExitCodeProcess(pi.hProcess, &ExitCode);
         CloseHandle(pi.hThread);
