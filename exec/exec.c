@@ -38,7 +38,7 @@ DWORD ExecCreateProcess(const char* command_str, char** result)
 {
     PROCESS_INFORMATION pi;
     STARTUPINFO si;
-    HANDLE hStdout;
+    //HANDLE hStdout;
     SECURITY_ATTRIBUTES sa;
     HANDLE hRead,hWrite;
     char buffer[4096] = {0};
@@ -59,13 +59,14 @@ DWORD ExecCreateProcess(const char* command_str, char** result)
 	runcmd=StringSet(runcmd, command_str);
 	//runcmd=StringInsert (runcmd,"c://windows//system32//cmd.exe /c ",0);
 
-    hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    //hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
     ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     si.wShowWindow = SW_SHOW;
     si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
-    si.hStdOutput = hWrite;
+	si.hStdOutput = hWrite;
+	si.hStdError = hWrite;
 
     if (CreateProcess(NULL, runcmd, NULL, NULL, TRUE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi))
     {
@@ -92,8 +93,10 @@ DWORD ExecCreateProcess(const char* command_str, char** result)
         {
             break;
         }
+		
 		*result = StringAppent(*result, buffer);
 		memset(buffer,0,4096);
+		//printf(buffer);
     }
 
     return ExitCode;
@@ -118,10 +121,7 @@ static int l_ExecCreateProcess(lua_State* L)
 	}
 
 	ret = ExecCreateProcess(cmd, &result);
-	if (ret == 0)
-	{
-		result = NULL;
-	}
+
 	//·µ»Ø½á¹û
 	lua_pushstring(L, result);
 	free(result);
