@@ -11,9 +11,12 @@
 
 int main(int argc, char *argv[])
 {
-	IntelHexFormat* ihf = NULL;
-	ihf = IntelHexFileInput("dw732.hex");
-	IntelHexFileToBin(ihf, "out.bin");
+    IntelHexFormat* ihf1 = NULL;
+    IntelHexFormat* ihf2 = NULL;
+    ihf1 = IntelHexFileInput("bl.hex");
+    ihf2 = IntelHexFileInput("iap.hex");
+	IntelHexFileMerge(ihf1, ihf2);
+    IntelHexFileOutput(ihf1, "test.hex");
 	return 0;
 }
 

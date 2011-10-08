@@ -24,6 +24,16 @@ TODOs:
 #include <string.h>
 #include "intel.h"
 
+enum RecordType
+{
+    TYPE_DATA,
+    TYPE_EOF,
+    TYPE_EXTENDED_SEGMENT_ADDRESS, 
+    TYPE_START_SEGMENT_ADDRESS,
+    TYPE_EXTENDED_LINEAR_ADDRESS,
+    TYPE_START_LINEAR_ADDRESS 
+};
+
 struct Block
 {
 	u32 Address;
@@ -508,7 +518,7 @@ IntelHexFormat* IntelHexFileInput(const u8* file_name)
 	fclose(fp);
 	fprintf(stdout, "Processing complete.          \n");
 
-    fprintf(stdout, "Data length\t %d\n", hex_file->TotalLength);
+    fprintf(stdout, "Data length\t %d byte(s)\n", hex_file->TotalLength);
 
     return hex_file;
 }
@@ -557,7 +567,10 @@ Merge ifh1 and ifh2 to ifh1.
 bool IntelHexFileMerge(struct IntelHexFormat* ihf1, struct IntelHexFormat* ihf2)
 {
     struct IntelHexFormat* temp = NULL;
-    if ((ihf1->EndOfFile == FALSE) || (ihf2->EndOfFile == FALSE))
+    if ((ihf1 == NULL) || 
+        (ihf2 == NULL) || 
+        (ihf1->EndOfFile == FALSE) || 
+        (ihf2->EndOfFile == FALSE))
     {
         return FALSE;
     }
@@ -617,7 +630,7 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, u8* hex_path)
     u8 str[80];
     u8 buf[37];
     u8 buf_len = 0;
-    u32 ulba = 0xFFFF;
+    u32 ulba = 0xFFFF; /*Upper Linear Base Address*/
     u32 addr = 0;
     u32 data_len = 0;
     u32 rest_len = 0;
@@ -656,12 +669,14 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, u8* hex_path)
     while (current != NULL)
     {
         /*Extended Linear Address*/
-        if ((addr >> 16) != ulba)
+        /*if ULBA had changed or has chance to change*/
+        if (((addr >> 16) != ulba) ||
+            ((addr & 0xFFFF) + 0xFF) > 0x10000)
         {
             ulba = addr >> 16;
             memset(buf, 0x00, sizeof(buf));
             buf[0] = 2;
-            buf[3] = 0x04;
+            buf[3] = TYPE_EXTENDED_LINEAR_ADDRESS;
             buf[4] = (u8)(ulba >> 8);
             buf[5] = (u8)(ulba);
             buf[6] = GetCheckSum(buf, 6);
@@ -687,7 +702,7 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, u8* hex_path)
         buf[0] = (u8)data_len;
         buf[1] = (u8)(addr >> 8);
         buf[2] = (u8)addr;
-        buf[3] = 0x00;
+        buf[3] = TYPE_DATA;
 
         memcpy(buf + 4, current->Data + offset, data_len);
         buf_len = (u8)(4 + data_len);
@@ -718,7 +733,7 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, u8* hex_path)
         memset(buf, 0x00, sizeof(buf));
         buf[0] = 4;
 
-        buf[3] = 0x05;
+        buf[3] = TYPE_START_LINEAR_ADDRESS;
         buf[4] = (u8)(ihf->StartLinearAddress >> 24);
         buf[5] = (u8)(ihf->StartLinearAddress >> 16);
         buf[6] = (u8)(ihf->StartLinearAddress >> 8);
@@ -734,13 +749,14 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, u8* hex_path)
     memset(buf, 0x00, sizeof(buf));
     buf[0] = 0;
 
-    buf[3] = 0x01;
+    buf[3] = TYPE_EOF;
     buf[4] = GetCheckSum(buf, 4);
     buf_len = 5;
     BytesMapHexStr(str, buf, buf_len);
     fprintf(fp, ":%s\n", str);
 
     fprintf(stdout, "Data length\t %d\n", ihf->TotalLength);
+    fclose(fp);
 
     return TRUE;
 }

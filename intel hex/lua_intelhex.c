@@ -98,6 +98,7 @@ static int l_HexMerge(lua_State* L)
 	{
 		return 0;
 	}
+    printf("Merging hex file %s and %s...\n", src1, src2);
 	if (IntelHexFileMerge(ihf1, ihf2) == TRUE)
 	{
 		IntelHexFileOutput(ihf1, dest);
