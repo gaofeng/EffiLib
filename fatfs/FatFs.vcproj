@@ -167,6 +167,10 @@
 	</References>
 	<Files>
 		<File
+			RelativePath=".\00readme.txt"
+			>
+		</File>
+		<File
 			RelativePath=".\diskio.h"
 			>
 		</File>

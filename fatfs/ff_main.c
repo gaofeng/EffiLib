@@ -4,7 +4,7 @@
 void main(void)
 {
     FATFS fs[2];         /* Work area (file system object) for logical drives */
-    FIL fsrc, fdst;      /* file objects */
+    FIL fsrc;      /* file objects */
     BYTE buffer[1540];   /* file copy buffer */
     BYTE buffer2[100];
     FRESULT res;         /* FatFs function common result code */
