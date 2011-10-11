@@ -119,5 +119,6 @@ static const luaL_reg IntelHexFunctions[]=
 int __declspec(dllexport) luaopen_intelhex(lua_State* L)
 {
 	luaL_openlib(L,"intelhex",IntelHexFunctions,0);
+    printf("Library intelhex V1.00.\n");
 	return 1;
 }

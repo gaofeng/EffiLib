@@ -16,7 +16,7 @@ u32 IntelHexFileGetSize(IntelHexFormat* ihf);
 
 u32 IntelHexFileFillEmptyValue(IntelHexFormat* ihf, u8 empty_value);
 
-bool IntelHexFileOutput(IntelHexFormat* ihf, u8* hex_path);
+bool IntelHexFileOutput(IntelHexFormat* ihf, const u8* hex_path);
 
 /*
 Merge ifh1 and ifh2 to ifh1.

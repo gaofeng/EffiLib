@@ -566,7 +566,7 @@ Merge ifh1 and ifh2 to ifh1.
 */
 bool IntelHexFileMerge(struct IntelHexFormat* ihf1, struct IntelHexFormat* ihf2)
 {
-    struct IntelHexFormat* temp = NULL;
+    struct IntelHexFormat temp;
     if ((ihf1 == NULL) || 
         (ihf2 == NULL) || 
         (ihf1->EndOfFile == FALSE) || 
@@ -592,9 +592,9 @@ bool IntelHexFileMerge(struct IntelHexFormat* ihf1, struct IntelHexFormat* ihf2)
     }
     if (ihf1->BlockHead->Address > (ihf2->BlockTail->Address + ihf2->BlockTail->Length))
     {
-        temp = ihf1;
-        ihf1 = ihf2;
-        ihf2 = temp;
+        memcpy(&temp, ihf1, sizeof(struct IntelHexFormat));
+        memcpy(ihf1, ihf2, sizeof(struct IntelHexFormat));
+        memcpy(ihf2, &temp, sizeof(struct IntelHexFormat));
     }
 
     if ((ihf1->BlockTail->Address + ihf1->BlockTail->Length) > ihf2->BlockHead->Address)
@@ -624,7 +624,7 @@ static u8 GetCheckSum(u8* buf, u32 len)
     return cs;
 }
 /*Output data to hex_path file following Intel HEX format*/
-bool IntelHexFileOutput(struct IntelHexFormat* ihf, u8* hex_path)
+bool IntelHexFileOutput(struct IntelHexFormat* ihf, const u8* hex_path)
 {
     //max line length is 42
     u8 str[80];
