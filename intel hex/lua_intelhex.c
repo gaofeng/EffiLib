@@ -11,7 +11,7 @@
 static int l_HexToBin(lua_State* L)
 {
 	int top = 0;
-	char* hex_file = NULL;
+	const char* hex_file = NULL;
 	char* bin_file = NULL;
 	int str_len;
 	IntelHexFormat* ihf = NULL;
@@ -38,7 +38,7 @@ static int l_HexToBin(lua_State* L)
 	else if ((top == 2) && (lua_isstring(L, -1) == 1) && (lua_isstring(L, -2) == 1))
 	{
 		hex_file = lua_tostring(L, -2);
-		bin_file = lua_tostring(L, -1);
+		bin_file = (char*)lua_tostring(L, -1);
 	}
 	else
 	{
