@@ -7,3 +7,9 @@ Release
 *.vdisk
 lua5.1/bin
 lua5.1/lib
+*.opensdf
+*.sdf
+*.hex
+*.bin
+ipch
+*.filters
