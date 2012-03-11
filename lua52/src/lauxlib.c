@@ -474,7 +474,7 @@ LUALIB_API void luaL_pushresult (luaL_Buffer *B) {
     lua_remove(L, -2);  /* remove old buffer */
 }
 
-
+/*数据已放到缓冲区内，只需增加字符串长度并放到栈中*/
 LUALIB_API void luaL_pushresultsize (luaL_Buffer *B, size_t sz) {
   luaL_addsize(B, sz);
   luaL_pushresult(B);

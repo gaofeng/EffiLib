@@ -17,7 +17,9 @@
 #include "lstate.h"
 #include "lzio.h"
 
-
+/*
+调用ZIO的reader函数以读入更多的数据到z结构体，
+并返回第一个字节*/
 int luaZ_fill (ZIO *z) {
   size_t size;
   lua_State *L = z->L;
@@ -43,6 +45,7 @@ void luaZ_init (lua_State *L, ZIO *z, lua_Reader reader, void *data) {
 
 
 /* --------------------------------------------------------------- read --- */
+//从z获取n个字节到b缓冲区。
 size_t luaZ_read (ZIO *z, void *b, size_t n) {
   while (n) {
     size_t m;

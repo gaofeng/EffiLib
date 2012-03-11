@@ -180,7 +180,8 @@ LUA_API void lua_remove (lua_State *L, int idx) {
   lua_unlock(L);
 }
 
-
+//将栈顶的元素移动到idx所指向的位置，同时idx之上的数据上移以空出idx指向的位置。
+//栈中的总元素个数不变。
 LUA_API void lua_insert (lua_State *L, int idx) {
   StkId p;
   StkId q;
@@ -203,7 +204,7 @@ static void moveto (lua_State *L, TValue *fr, int idx) {
      (collector revisits it before finishing collection) */
 }
 
-
+//将栈顶元素移到idx指向的位置。
 LUA_API void lua_replace (lua_State *L, int idx) {
   lua_lock(L);
   api_checknelems(L, 1);
