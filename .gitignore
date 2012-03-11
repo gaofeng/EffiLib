@@ -13,3 +13,6 @@ lua5.1/lib
 *.bin
 ipch
 *.filters
+/lua_scripts/DWIAP.dll
+/lua_scripts/exec.dll
+/lua_scripts/intelHex.dll
