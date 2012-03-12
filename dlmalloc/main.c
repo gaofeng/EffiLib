@@ -81,6 +81,7 @@ void main(void)
     u32 leftbits;
     u32 leastbit;
     u32 sameorleftbits;
+    char* buf = dlmalloc(20);
 
     a = 144;
     b = bitScanForward(a);
