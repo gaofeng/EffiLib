@@ -508,7 +508,7 @@ IntelHexFormat* IntelHexFileInput(const char* file_name)
     fprintf(stdout, "正在读入Intelhex文件: %s\n", file_name);
     while (fgets((char*)LineBuffer, sizeof(LineBuffer), fp) != NULL)
     {
-        fprintf(stdout, "正在处理第%d行...\r", lineno);
+        //fprintf(stdout, "正在处理第%d行...\r", lineno);
         if (ParseOneLine(hex_file, lineno, LineBuffer) == FALSE)
         {
             break;
