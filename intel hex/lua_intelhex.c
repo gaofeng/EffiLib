@@ -28,7 +28,8 @@ static int l_HexToBin(lua_State* L)
 			if (bin_file == NULL)
 			{
 				printf("Error: Not enough memory.\n");
-				return 0;
+                lua_pushboolean(L, FALSE);
+                return 1;
 			}
 			memset(bin_file, 0x00, str_len + 1);
 			strcpy(bin_file, hex_file);
@@ -43,7 +44,8 @@ static int l_HexToBin(lua_State* L)
 	else
 	{
 		luaL_error(L, "Wrong Arguments.");
-		return 0;
+        lua_pushboolean(L, FALSE);
+        return 1;
 	}
 
 	/*读入HEX文件*/
@@ -86,19 +88,22 @@ static int l_HexMerge(lua_State* L)
 	else
 	{
 		luaL_error(L, "Wrong Arguments.");
-		return 0;
+        lua_pushboolean(L, FALSE);
+        return 1;
 	}
 	ihf1 = IntelHexFileInput(src1);
 	if (ihf1 == NULL)
 	{
-		return 0;
+        lua_pushboolean(L, FALSE);
+        return 1;
 	}
 	ihf2 = IntelHexFileInput(src2);
 	if (ihf2 == NULL)
 	{
-		return 0;
+        lua_pushboolean(L, FALSE);
+		return 1;
 	}
-    printf("Merging hex file %s and %s...\n", src1, src2);
+    printf("正在合并两个HEX文件：\n文件1： %s。文件2：%s\n", src1, src2);
 	if (IntelHexFileMerge(ihf1, ihf2) == TRUE)
 	{
 		IntelHexFileOutput(ihf1, dest);
@@ -119,6 +124,6 @@ static const luaL_reg IntelHexFunctions[]=
 int __declspec(dllexport) luaopen_intelhex(lua_State* L)
 {
 	luaL_openlib(L,"intelhex",IntelHexFunctions,0);
-    printf("Library intelhex V1.00.\n");
+    printf("Library intelhex V1.01.\n");
 	return 1;
 }

@@ -483,7 +483,7 @@ static bool ParseOneLine(struct IntelHexFormat* hex_file, u32 line_no, u8* str)
 /*
 Read in a intel hex format file into internal. return TRUE if success.
 */
-IntelHexFormat* IntelHexFileInput(const u8* file_name)
+IntelHexFormat* IntelHexFileInput(const char* file_name)
 {
     FILE* fp = NULL;
     u32 lineno = 0;
@@ -492,7 +492,7 @@ IntelHexFormat* IntelHexFileInput(const u8* file_name)
 	hex_file = malloc(sizeof(struct IntelHexFormat));
 	if (!hex_file)
 	{
-		printf("Error: Not enough Memory.\n");
+		printf("Error: 内存不足.\n");
 		return NULL;
 	}
 	memset(hex_file, 0x00, sizeof(struct IntelHexFormat));
@@ -500,15 +500,15 @@ IntelHexFormat* IntelHexFileInput(const u8* file_name)
     fp = fopen(file_name, "r");
     if (fp == NULL)
     {
-        printf("Can't open file %s when read hex file.\n", file_name);
+        printf("Error: 无法打开文件: %s。\n", file_name);
         return NULL;
     }
     hex_file->FileMode = MODE_LINEAR;
     lineno = 1;
-    fprintf(stdout, "Read in Intel HEX file %s...\n", file_name);
+    fprintf(stdout, "正在读入Intelhex文件: %s\n", file_name);
     while (fgets((char*)LineBuffer, sizeof(LineBuffer), fp) != NULL)
     {
-        fprintf(stdout, "Processing line %d...\r", lineno);
+        fprintf(stdout, "正在处理第%d行...\r", lineno);
         if (ParseOneLine(hex_file, lineno, LineBuffer) == FALSE)
         {
             break;
@@ -516,9 +516,10 @@ IntelHexFormat* IntelHexFileInput(const u8* file_name)
         lineno++;
     }
 	fclose(fp);
-	fprintf(stdout, "Processing complete.          \n");
+	fprintf(stdout, "处理完成.                 \n");
 
-    fprintf(stdout, "Data length\t %d byte(s)\n", hex_file->TotalLength);
+    fprintf(stdout, "数据长度: %d byte(s)\n", hex_file->TotalLength);
+    fprintf(stdout, "\n");
 
     return hex_file;
 }
@@ -645,11 +646,11 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, const u8* hex_path)
 
     if ((fp = fopen(hex_path, "w")) == NULL)
     {
-        fprintf(stdout, "Error: Can't create file %s", hex_path);
+        fprintf(stdout, "Error: 无法创建文件：%s", hex_path);
         return FALSE;
     }
 
-    fprintf(stdout, "Output Intel HEX file %s\n", hex_path);
+    fprintf(stdout, "输出的HEX文件为：%s\n", hex_path);
 
     /*determine each data record's max length*/
     if (ihf->TotalLength > 0xFFFF)
@@ -755,7 +756,7 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, const u8* hex_path)
     BytesMapHexStr(str, buf, buf_len);
     fprintf(fp, ":%s\n", str);
 
-    fprintf(stdout, "Data length\t %d\n", ihf->TotalLength);
+    fprintf(stdout, "数据长度为: %d byte(s)\n\n", ihf->TotalLength);
     fclose(fp);
 
     return TRUE;
@@ -790,7 +791,7 @@ bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* file_path)
 		free(bin_file_path);
         return FALSE;
     }
-	fprintf(stdout, "Output file %s created.\n", bin_file_path);
+	fprintf(stdout, "输出文件创建成功：%s。\n", bin_file_path);
 
     current = ihf->BlockHead;
 
@@ -801,7 +802,7 @@ bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* file_path)
             start_addr = current->Address;
             current_addr = current->Address;
             first_block = FALSE;
-			fprintf(stdout, "Start Address: 0x%0*X\n", 8, start_addr);
+			fprintf(stdout, "起始地址: 0x%0*X\n", 8, start_addr);
 		}
         /*Start a new data section*/
         if (current_addr != current->Address)
@@ -821,7 +822,7 @@ bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* file_path)
 				free(bin_file_path);
                 return FALSE;
             }
-			fprintf(stdout, "Output file %s created.\n", bin_file_path);
+			fprintf(stdout, "输出文件创建成功：%s。\n", bin_file_path);
 			first_block = FALSE;
         }
         fwrite(current->Data, 1, current->Length, fp);
@@ -830,6 +831,7 @@ bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* file_path)
     }
     fclose(fp);
 	free(bin_file_path);
+    fprintf(stdout, "生成bin文件成功。\n\n");
     return TRUE;
 }
 

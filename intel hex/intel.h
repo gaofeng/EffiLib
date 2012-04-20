@@ -10,7 +10,7 @@ typedef struct IntelHexFormat IntelHexFormat;
 
 void usage(void);
 
-IntelHexFormat* IntelHexFileInput(const u8* file_name);
+IntelHexFormat* IntelHexFileInput(const char* file_name);
 
 u32 IntelHexFileGetSize(IntelHexFormat* ihf);
 
