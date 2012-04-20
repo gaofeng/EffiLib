@@ -2245,7 +2245,7 @@ typedef unsigned int flag_t;           /* The type of various bit flag sets */
 #define cinuse(p)           ((p)->head & CINUSE_BIT)
 #define pinuse(p)           ((p)->head & PINUSE_BIT)
 #define flag4inuse(p)       ((p)->head & FLAG4_BIT)
-#define is_inuse(p)         (((p)->head & INUSE_BITS) != PINUSE_BIT)
+#define is_inuse(p)         (((p)->head & INUSE_BITS) != PINUSE_BIT) //²»¶®
 #define is_mmapped(p)       (((p)->head & INUSE_BITS) == 0)
 
 #define chunksize(p)        ((p)->head & ~(FLAG_BITS))
@@ -2712,7 +2712,7 @@ static int has_segment_link(mstate m, msegmentptr ss) {
 #endif /* MORECORE_CANNOT_TRIM */
 
 /*
-  TOP_FOOT_SIZE is padding at the end of a segment, including space
+  TOP_FOOT_SIZE(40) is padding at the end of a segment, including space
   that may be needed to place segment records and fenceposts when new
   noncontiguous segments are added.
 */

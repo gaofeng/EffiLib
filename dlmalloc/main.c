@@ -81,7 +81,10 @@ void main(void)
     u32 leftbits;
     u32 leastbit;
     u32 sameorleftbits;
-    char* buf = dlmalloc(20);
+    char* buf1 = dlmalloc(8);
+    char* buf2 = dlmalloc(5);
+    char* buf3 = dlmalloc(15);
+    dlfree(buf1);
 
     a = 144;
     b = bitScanForward(a);
