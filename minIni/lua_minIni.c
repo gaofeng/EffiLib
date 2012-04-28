@@ -13,7 +13,7 @@ static int l_ini_gets(lua_State* L)
 	int top;
 	const char* section = NULL;
 	const char* key = NULL;
-    const char* default_value = NULL;
+    const char* default_value = "";
     const char* filename = NULL;
     char* buffer = NULL;
     int value_len = 0;
@@ -45,7 +45,8 @@ static int l_ini_gets(lua_State* L)
     }
     memset(buffer, 0x00, INI_BUFFERSIZE + 1);
     value_len = ini_gets(section, key, default_value, buffer, INI_BUFFERSIZE, filename);
-    lua_pushstring(L, buffer);
+
+	lua_pushstring(L, buffer);
 	return 1;
 }
 
