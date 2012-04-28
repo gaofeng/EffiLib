@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;USE_DL_PREFIX"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -177,6 +177,10 @@
 		</File>
 		<File
 			RelativePath=".\malloc.c"
+			>
+		</File>
+		<File
+			RelativePath=".\malloc.h"
 			>
 		</File>
 	</Files>
