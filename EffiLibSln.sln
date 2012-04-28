@@ -1,38 +1,38 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FatFs", "fatfs\FatFs.vcproj", "{F4D77BB8-426A-4E46-BFFA-195B2E7C2386}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "intelHex", "intel hex\intelHex.vcproj", "{89CB1334-E75E-44BF-9FB7-A1C5B59A8C3B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "minIni", "minIni\minIni.vcproj", "{847B56CA-30A5-4FD4-940A-FD5C560110A1}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{43E372FA-1D08-41E2-9273-F799788561A0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_def", "dll_def\dll_def.vcproj", "{B978F0F7-EB75-4289-B8DD-C1D804BE0696}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exec", "exec\exec.vcproj", "{228C9750-9A2A-403B-B6C2-1ADFC0E1BFCE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua_capi", "lua_capi\lua_capi.vcproj", "{F0FD6687-3E99-49FA-8664-02D8DB5CB5C1}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lua", "Lua", "{152722EB-A25D-43B3-BFA3-91B1722C1DFF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua5.1_exe", "lua5.1\mak.vs2008\lua5.1_exe.vcproj", "{20162DDB-DFC1-AA46-A834-53E8088076B8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua5.1_dll", "lua5.1\mak.vs2008\lua5.1_dll.vcproj", "{7243E30E-52D9-384A-91A2-C8783F1F808B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_export", "dll_export\dll_export.vcproj", "{D12F5E23-6505-4023-A594-9AAF72C03697}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylib", "lua_mylib\mylib.vcproj", "{710FC04C-127F-4B0B-8033-516D59AE7E59}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C08D929E-AD7B-492A-A802-43CE4EF150AB}"
 	ProjectSection(SolutionItems) = preProject
 		Plans.txt = Plans.txt
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FatFs", "fatfs\FatFs.vcxproj", "{F4D77BB8-426A-4E46-BFFA-195B2E7C2386}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DWIAP", "DWIAP\DWIAP.vcproj", "{6BBDF50C-60FA-463F-97A3-A42B53EE1CF4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "intelHex", "intel hex\intelHex.vcxproj", "{89CB1334-E75E-44BF-9FB7-A1C5B59A8C3B}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "minIni", "minIni\minIni.vcxproj", "{847B56CA-30A5-4FD4-940A-FD5C560110A1}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_def", "dll_def\dll_def.vcxproj", "{B978F0F7-EB75-4289-B8DD-C1D804BE0696}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exec", "exec\exec.vcxproj", "{228C9750-9A2A-403B-B6C2-1ADFC0E1BFCE}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua_capi", "lua_capi\lua_capi.vcxproj", "{F0FD6687-3E99-49FA-8664-02D8DB5CB5C1}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua5.1_exe", "lua5.1\mak.vs2008\lua5.1_exe.vcxproj", "{20162DDB-DFC1-AA46-A834-53E8088076B8}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua5.1_dll", "lua5.1\mak.vs2008\lua5.1_dll.vcxproj", "{7243E30E-52D9-384A-91A2-C8783F1F808B}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_export", "dll_export\dll_export.vcxproj", "{D12F5E23-6505-4023-A594-9AAF72C03697}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mylib", "lua_mylib\mylib.vcxproj", "{710FC04C-127F-4B0B-8033-516D59AE7E59}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DWIAP", "DWIAP\DWIAP.vcxproj", "{6BBDF50C-60FA-463F-97A3-A42B53EE1CF4}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dlmalloc", "dlmalloc\dlmalloc.vcxproj", "{C4ADE86F-742F-4D99-ADFA-B259C5DF0071}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dlmalloc", "dlmalloc\dlmalloc.vcproj", "{C4ADE86F-742F-4D99-ADFA-B259C5DF0071}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
