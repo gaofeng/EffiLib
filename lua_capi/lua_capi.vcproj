@@ -171,6 +171,18 @@
 		<File
 			RelativePath=".\interpreter.c"
 			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\stack_use.c"
+			>
 		</File>
 		<File
 			RelativePath=".\win_size.lua"
