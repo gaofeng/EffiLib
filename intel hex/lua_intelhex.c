@@ -14,13 +14,12 @@ static int l_HexToBin(lua_State* L)
 	const char* hex_file = NULL;
 	char* bin_file = NULL;
 	int str_len;
-	IntelHexFormat* ihf = NULL;
-	bool result = FALSE; 
+	IntelHexFormat* ihf = NULL; 
 
 	top = lua_gettop(L);
-	if ((top == 1) && (lua_isstring(L, -1) == 1))
+	if (top == 1)
 	{
-		hex_file = lua_tostring(L,-1);
+		hex_file = luaL_checkstring(L, 1);
 		str_len = strlen(hex_file);
 		if (strcmp(hex_file + str_len - 4, ".hex") == 0)
 		{
@@ -36,81 +35,94 @@ static int l_HexToBin(lua_State* L)
 			memcpy(bin_file + str_len - 4, ".bin", 4);
 		}
 	}
-	else if ((top == 2) && (lua_isstring(L, -1) == 1) && (lua_isstring(L, -2) == 1))
+	else if (top == 2)
 	{
-		hex_file = lua_tostring(L, -2);
-		bin_file = (char*)lua_tostring(L, -1);
+		hex_file = luaL_checkstring(L, 1);
+		bin_file = (char*)luaL_checkstring(L, 2);
 	}
 	else
 	{
-		luaL_error(L, "Wrong Arguments.");
+		luaL_error(L, "Must have one or two arguments.");
         lua_pushboolean(L, FALSE);
         return 1;
 	}
 
-	/*读入HEX文件*/
+	printf("读入HEX文件: %s\n", hex_file);
 	ihf = IntelHexFileInput(hex_file);
 	if (ihf)
 	{
 		/*数据间隙用0xFF填充*/
 		IntelHexFileFillEmptyValue(ihf, 0xFF);
-		/*输出到BIN格式*/
-		result = IntelHexFileToBin(ihf, bin_file);
-		free(ihf);
+		printf("输出BIN格式文件: %s\n", bin_file);
+		if (IntelHexFileToBin(ihf, bin_file) == TRUE)
+		{
+			lua_pushboolean(L, TRUE);
+		}
+		else
+		{
+			printf("ERROR: 输出BIN格式文件失败。\n");
+			lua_pushboolean(L, FALSE);
+		}
+	}
+	else
+	{
+		printf("ERROR: 读取HEX文件失败。\n");
+		lua_pushboolean(L, FALSE);
 	}
 	if (top == 1)
 	{
 		free(bin_file);
 	}
-	lua_pushboolean(L, result);
+	IntelHexFree(ihf);
 	return 1;
 }
 
 static int l_HexMerge(lua_State* L)
 {
-	int top = 0;
 	const char* src1 = NULL;
 	const char* src2 = NULL;
 	const char* dest = NULL;
 	IntelHexFormat* ihf1 = NULL;
 	IntelHexFormat* ihf2 = NULL;
 
-	top = lua_gettop(L);
-	if ((top == 3) && 
-		(lua_isstring(L, -1) == 1) && 
-		(lua_isstring(L, -2) == 1) &&
-		(lua_isstring(L, -3) == 1))
-	{
-		src1 = lua_tostring(L, -3);
-		src2 = lua_tostring(L, -2);
-		dest = lua_tostring(L, -1);
-	}
-	else
-	{
-		luaL_error(L, "Wrong Arguments.");
-        lua_pushboolean(L, FALSE);
-        return 1;
-	}
+	src1 = luaL_checkstring(L, 1);
+	src2 = luaL_checkstring(L, 2);
+	dest = luaL_checkstring(L, 3);
+
+	fprintf(stdout, "读入第一个源Intelhex文件: %s\n", src1);
 	ihf1 = IntelHexFileInput(src1);
 	if (ihf1 == NULL)
 	{
         lua_pushboolean(L, FALSE);
         return 1;
 	}
+	fprintf(stdout, "读入第二个源Intelhex文件: %s\n", src2);
 	ihf2 = IntelHexFileInput(src2);
 	if (ihf2 == NULL)
 	{
         lua_pushboolean(L, FALSE);
 		return 1;
 	}
-    printf("正在合并两个HEX文件：\n文件1： %s。文件2：%s\n", src1, src2);
 	if (IntelHexFileMerge(ihf1, ihf2) == TRUE)
 	{
-		IntelHexFileOutput(ihf1, dest);
+		if (IntelHexFileOutput(ihf1, dest) == TRUE)
+		{
+			fprintf(stdout, "合并后的HEX文件为：%s\n", dest);
+			lua_pushboolean(L, TRUE);
+		}
+		else
+		{
+			fprintf(stdout, "ERROR: 输出合并后HEX文件时发生错误。\n");
+			lua_pushboolean(L, FALSE);
+		}
 	}
-	free(ihf1);
-	free(ihf2);
-	lua_pushboolean(L, TRUE);
+	else
+	{
+		fprintf(stdout, "ERROR: 合并HEX文件时发生错误。\n");
+		lua_pushboolean(L, FALSE);
+	}
+	IntelHexFree(ihf1);
+	IntelHexFree(ihf2);
 	return 1;
 }
 

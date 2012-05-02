@@ -29,4 +29,6 @@ name will append start address.
 */
 bool IntelHexFileToBin(IntelHexFormat* ihf, u8* bin_file_path);
 
+void IntelHexFree(IntelHexFormat* ihf);
+
 #endif // _INTEL_H

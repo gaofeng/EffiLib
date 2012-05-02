@@ -505,10 +505,9 @@ IntelHexFormat* IntelHexFileInput(const char* file_name)
     }
     hex_file->FileMode = MODE_LINEAR;
     lineno = 1;
-    fprintf(stdout, "正在读入Intelhex文件: %s\n", file_name);
+
     while (fgets((char*)LineBuffer, sizeof(LineBuffer), fp) != NULL)
     {
-        //fprintf(stdout, "正在处理第%d行...\r", lineno);
         if (ParseOneLine(hex_file, lineno, LineBuffer) == FALSE)
         {
             break;
@@ -516,10 +515,6 @@ IntelHexFormat* IntelHexFileInput(const char* file_name)
         lineno++;
     }
 	fclose(fp);
-	fprintf(stdout, "处理完成.                 \n");
-
-    fprintf(stdout, "数据长度: %d byte(s)\n", hex_file->TotalLength);
-    fprintf(stdout, "\n");
 
     return hex_file;
 }
@@ -608,6 +603,9 @@ bool IntelHexFileMerge(struct IntelHexFormat* ihf1, struct IntelHexFormat* ihf2)
     ihf1->BlockTail->Next = ihf2->BlockHead;
     ihf1->BlockTail = ihf2->BlockTail;
     ihf1->TotalLength += ihf2->TotalLength;
+	ihf2->BlockHead = NULL;
+	ihf2->BlockTail = NULL;
+	ihf2->TotalLength = 0;
 
     ihf1->StartLinearAddress = 0xFFFFFFFF;
 
@@ -650,7 +648,6 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, const u8* hex_path)
         return FALSE;
     }
 
-    fprintf(stdout, "输出的HEX文件为：%s\n", hex_path);
 
     /*determine each data record's max length*/
     if (ihf->TotalLength > 0xFFFF)
@@ -835,3 +832,22 @@ bool IntelHexFileToBin(struct IntelHexFormat* ihf, u8* file_path)
     return TRUE;
 }
 
+void IntelHexFree(IntelHexFormat* ihf)
+{
+	struct Block* temp = NULL;
+	if (ihf == NULL)
+	{
+		return;
+	}
+	while (ihf->BlockHead)
+	{
+		temp = ihf->BlockHead;
+		ihf->BlockHead = ihf->BlockHead->Next;
+		if (temp->Data)
+		{
+			free(temp->Data);
+		}
+		free(temp);
+	}
+	free(ihf);
+}
