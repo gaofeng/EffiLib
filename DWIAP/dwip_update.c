@@ -5,14 +5,16 @@
 #include "dwip_update.h"
 #include "usdl_crc.h"
 
+#define STR_INFO_LEN (20)
+
 typedef struct FileHeader_st
 {
 	u32 header_crc; /*文件头校验*/
 	u32 update_flag; /*由终端升级后赋值*/
 	u32 attribute;  /*文件类型，升级文件为1*/
 	u32 sn;			/*文件序列号*/
-	u8 version[20]; /*版本字符串，以0x00结束*/
-	u8 product_name[20]; /*产品名称，以0x00结束*/
+	u8 version[STR_INFO_LEN]; /*版本字符串，以0x00结束*/
+	u8 product_name[STR_INFO_LEN]; /*产品名称，以0x00结束*/
 	u32 update_file_length; /*升级文件总长度*/
 	u32 update_file_crc;	/*升级文件总校验*/
 	u32 time;	/*时间，文件时间戳*/
@@ -84,8 +86,8 @@ int GenerateUpdateFile(const char* bin_file_path, const char* dat_file_path, con
 	memset(fht, 0x00, sizeof(FileHeaderType));
 	fht->attribute = 1;
 	fht->sn = 0;
-	strncpy(fht->version, version, 20);
-	strncpy(fht->product_name, product_name, 20);
+	strncpy(fht->version, version, STR_INFO_LEN - 1);
+	strncpy(fht->product_name, product_name, STR_INFO_LEN - 1);
 
 	/*读取二进制程序文件*/
 	file_buf_size = 0;
