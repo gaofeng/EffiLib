@@ -35,5 +35,6 @@ static const luaL_reg DWIP_Update_Functions[]=
 int __declspec(dllexport) luaopen_dwiap(lua_State* L)
 {
 	luaL_openlib(L,"dwiap",DWIP_Update_Functions,0);
+    printf("Library dwiap V1.00.\n");
 	return 1;
 }

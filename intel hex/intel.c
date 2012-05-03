@@ -396,7 +396,7 @@ static bool ParseOneLine(struct IntelHexFormat* hex_file, u32 line_no, u8* str)
             return FALSE;
         }
         hex_file->EndOfFile = TRUE;
-        return FALSE;
+        return TRUE;
 
     case 2:
         //
@@ -497,7 +497,7 @@ IntelHexFormat* IntelHexFileInput(const char* file_name)
 	}
 	memset(hex_file, 0x00, sizeof(struct IntelHexFormat));
 
-    fp = fopen(file_name, "r");
+    fp = fopen(file_name, "rt");
     if (fp == NULL)
     {
         printf("Error: 无法打开文件: %s。\n", file_name);
@@ -515,6 +515,10 @@ IntelHexFormat* IntelHexFileInput(const char* file_name)
         lineno++;
     }
 	fclose(fp);
+    if (hex_file->EndOfFile == FALSE)
+    {
+        printf("Warning: Hex File do NOT have a EOF record.\n");
+    }
 
     return hex_file;
 }
@@ -568,6 +572,7 @@ bool IntelHexFileMerge(struct IntelHexFormat* ihf1, struct IntelHexFormat* ihf2)
         (ihf1->EndOfFile == FALSE) || 
         (ihf2->EndOfFile == FALSE))
     {
+        fprintf(stdout, "Error: Not valid parameters!\n");
         return FALSE;
     }
     if (ihf1->FileMode != ihf2->FileMode)
@@ -642,9 +647,9 @@ bool IntelHexFileOutput(struct IntelHexFormat* ihf, const u8* hex_path)
         return FALSE;
     }
 
-    if ((fp = fopen(hex_path, "w")) == NULL)
+    if ((fp = fopen(hex_path, "w+t")) == NULL)
     {
-        fprintf(stdout, "Error: 无法创建文件：%s", hex_path);
+        fprintf(stdout, "Error: 无法创建文件：%s\n", hex_path);
         return FALSE;
     }
 
