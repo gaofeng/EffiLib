@@ -95,7 +95,7 @@ enum quote_option {
 static TCHAR *skipleading(const TCHAR *str)
 {
   assert(str != NULL);
-  while (*str != '\0' && *str <= ' ')
+  while (*str != '\0' && *str > 0 && *str <= ' ')
     str++;
   return (TCHAR *)str;
 }
@@ -104,7 +104,7 @@ static TCHAR *skiptrailing(const TCHAR *str, const TCHAR *base)
 {
   assert(str != NULL);
   assert(base != NULL);
-  while (str > base && *(str-1) <= ' ')
+  while (str > base && *str > 0 && *(str-1) <= ' ')
     str--;
   return (TCHAR *)str;
 }
