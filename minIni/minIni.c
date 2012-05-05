@@ -271,6 +271,10 @@ int ini_gets(const TCHAR *Section, const TCHAR *Key, const TCHAR *DefValue,
     ok = getkeystring(&fp, Section, Key, -1, -1, Buffer, BufferSize);
     ini_close(&fp);
   } /* if */
+  else
+  {
+	  fprintf(stderr, "ERROR: Can't open file: %s.\n", Filename);
+  }
   if (!ok)
     save_strncpy(Buffer, DefValue, BufferSize, QUOTE_NONE);
   return _tcslen(Buffer);

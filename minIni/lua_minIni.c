@@ -37,10 +37,17 @@ static int l_ini_gets(lua_State* L)
     const char* default_value = "";
     const char* filename = NULL;
     char* buffer = NULL;
-    int value_len = 0;
+    int string_len = 0;
 
-    section = luaL_checkstring(L, 1);
-    key = luaL_checkstring(L, 2);
+	if (lua_isnil(L, 1) != 0)
+	{
+		section = NULL;
+	}
+	else
+	{
+		section = luaL_checkstring(L, 1);
+	}
+	key = luaL_checkstring(L, 2);
 
 	top = lua_gettop(L);
     if (top == 3)
@@ -63,9 +70,83 @@ static int l_ini_gets(lua_State* L)
         return 0;
     }
     memset(buffer, 0x00, INI_BUFFERSIZE + 1);
-    value_len = ini_gets(section, key, default_value, buffer, INI_BUFFERSIZE, filename);
+    string_len = ini_gets(section, key, default_value, buffer, INI_BUFFERSIZE, filename);
 
-	lua_pushlstring(L, buffer, value_len);
+	lua_pushlstring(L, buffer, string_len);
+	free(buffer);
+	return 1;
+}
+
+static int l_ini_getl(lua_State* L)
+{
+	int top;
+	const char* section = NULL;
+	const char* key = NULL;
+	long default_value = 0;
+	const char* filename = NULL;
+	long result_num = 0;
+
+	if (lua_isnil(L, 1) != 0)
+	{
+		section = NULL;
+	}
+	else
+	{
+		section = luaL_checkstring(L, 1);
+	}
+	key = luaL_checkstring(L, 2);
+
+	top = lua_gettop(L);
+	if (top == 3)
+	{
+		default_value = (long)luaL_checknumber(L, 3);
+	}
+
+	lua_getfield(L, LUA_ENVIRONINDEX, FN_KEY);
+	if (lua_isnil(L, -1))
+	{
+		luaL_error(L, "Must call open first!");
+		return 0;
+	}
+	filename = lua_tostring(L, -1);
+
+	result_num = ini_getl(section, key, default_value, filename);
+
+	lua_pushnumber(L, (lua_Number)result_num);
+	return 1;
+}
+
+static int l_ini_puts(lua_State* L)
+{
+	const char* section = NULL;
+	const char* key = NULL;
+	const char* value = NULL;
+	const char* filename = NULL;
+	int result = 0;
+
+	if (lua_isnil(L, 1) != 0)
+	{
+		section = NULL;
+	}
+	else
+	{
+		section = luaL_checkstring(L, 1);
+	}
+	key = luaL_checkstring(L, 2);
+
+	value = luaL_checkstring(L, 3);
+
+	lua_getfield(L, LUA_ENVIRONINDEX, FN_KEY);
+	if (lua_isnil(L, -1))
+	{
+		luaL_error(L, "Must call open first!");
+		return 0;
+	}
+	filename = lua_tostring(L, -1);
+
+	result = ini_puts(section, key, value, filename);
+
+	lua_pushboolean(L, result);
 	return 1;
 }
 
@@ -73,6 +154,8 @@ static const luaL_reg minIni_Functions[]=
 {
     {"open",l_ini_open},
 	{"gets",l_ini_gets},
+	{"getl",l_ini_getl},
+	{"puts",l_ini_puts},
 	{NULL,NULL}
 };
 
