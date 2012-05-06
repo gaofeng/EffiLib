@@ -49,6 +49,7 @@ static int l_ini_gets(lua_State* L)
 	}
 	key = luaL_checkstring(L, 2);
 
+    /*可选方式获取默认值*/
 	top = lua_gettop(L);
     if (top == 3)
     {
@@ -96,6 +97,7 @@ static int l_ini_getl(lua_State* L)
 	}
 	key = luaL_checkstring(L, 2);
 
+    /*可选方式获取默认值*/
 	top = lua_gettop(L);
 	if (top == 3)
 	{
@@ -114,6 +116,47 @@ static int l_ini_getl(lua_State* L)
 
 	lua_pushnumber(L, (lua_Number)result_num);
 	return 1;
+}
+
+static int l_ini_getbool(lua_State* L)
+{
+    int top;
+    const char* section = NULL;
+    const char* key = NULL;
+    int default_value = 0;
+    const char* filename = NULL;
+    int result = 0;
+
+    if (lua_isnil(L, 1) != 0)
+    {
+        section = NULL;
+    }
+    else
+    {
+        section = luaL_checkstring(L, 1);
+    }
+    key = luaL_checkstring(L, 2);
+
+    /*可选方式获取默认值*/
+    top = lua_gettop(L);
+    if (top == 3)
+    {
+        default_value = (long)luaL_checknumber(L, 3);
+    }
+
+    lua_getfield(L, LUA_ENVIRONINDEX, FN_KEY);
+    if (lua_isnil(L, -1))
+    {
+        luaL_error(L, "Must call open first!");
+        return 0;
+    }
+    filename = lua_tostring(L, -1);
+
+    /*返回值只可能为0或1*/
+    result = ini_getbool(section, key, default_value, filename);
+
+    lua_pushboolean(L, result);
+    return 1;
 }
 
 static int l_ini_puts(lua_State* L)
@@ -150,12 +193,92 @@ static int l_ini_puts(lua_State* L)
 	return 1;
 }
 
+static int l_ini_getsection(lua_State* L)
+{
+    char* section = NULL;
+    int s = 0;
+    const char* filename = NULL;
+    int section_length = 0;
+    int index = 0;
+
+    lua_getfield(L, LUA_ENVIRONINDEX, FN_KEY);
+    if (lua_isnil(L, -1))
+    {
+        luaL_error(L, "Must call open first!");
+        return 0;
+    }
+    filename = lua_tostring(L, -1);
+
+    section = (char*)malloc(INI_BUFFERSIZE + 1);
+    if (section == NULL)
+    {
+        luaL_error(L, "Not enough memory!\n");
+        return 0;
+    }
+    lua_newtable(L);
+    index = 1;
+    for (s = 0; (section_length = ini_getsection(s, section, INI_BUFFERSIZE, filename)) > 0; s++)
+    {
+        lua_pushlstring(L, section, section_length);
+        lua_rawseti(L, -2, index++);
+    }
+
+    free(section);
+    return 1;
+}
+
+static int l_ini_getkey(lua_State* L)
+{
+    const char* section = NULL;
+    char* key = NULL;
+    int index = 0;
+    const char* filename = NULL;
+    int key_length = 0;
+    int k = 0;
+
+    if ((lua_gettop(L) == 0) || (lua_isnil(L, 1) != 0))
+    {
+        section = NULL;
+    }
+    else
+    {
+        section = luaL_checkstring(L, 1);
+    }
+
+    lua_getfield(L, LUA_ENVIRONINDEX, FN_KEY);
+    if (lua_isnil(L, -1))
+    {
+        luaL_error(L, "Must call open first!");
+        return 0;
+    }
+    filename = lua_tostring(L, -1);
+
+    key = (char*)malloc(INI_BUFFERSIZE + 1);
+    if (key == NULL)
+    {
+        luaL_error(L, "Not enough memory!\n");
+        return 0;
+    }
+    lua_newtable(L);
+    index = 1;
+    for (k = 0; (key_length = ini_getkey(section, k, key, INI_BUFFERSIZE, filename)) > 0; k++)
+    {
+        lua_pushlstring(L, key, key_length);
+        lua_rawseti(L, -2, index++);
+    }
+    free(key);
+    return 1;
+}
+
 static const luaL_reg minIni_Functions[]=
 {
     {"open",l_ini_open},
 	{"gets",l_ini_gets},
 	{"getl",l_ini_getl},
-	{"puts",l_ini_puts},
+    {"getbool",l_ini_getbool},
+    {"puts",l_ini_puts},
+    {"getsection",l_ini_getsection},
+	{"getkey",l_ini_getkey},
 	{NULL,NULL}
 };
 
