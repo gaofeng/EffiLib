@@ -44,6 +44,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua52", "lua52\Lua52.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StrHashFunc", "StrHashFunc\StrHashFunc.vcxproj", "{CFD55024-2FC7-443F-BB9E-81A8E88FF111}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Win32API", "Win32API\Win32API.vcxproj", "{414519FC-F67E-43C1-8B65-AC1442E8D3FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -114,6 +116,10 @@ Global
 		{CFD55024-2FC7-443F-BB9E-81A8E88FF111}.Debug|Win32.Build.0 = Debug|Win32
 		{CFD55024-2FC7-443F-BB9E-81A8E88FF111}.Release|Win32.ActiveCfg = Release|Win32
 		{CFD55024-2FC7-443F-BB9E-81A8E88FF111}.Release|Win32.Build.0 = Release|Win32
+		{414519FC-F67E-43C1-8B65-AC1442E8D3FF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{414519FC-F67E-43C1-8B65-AC1442E8D3FF}.Debug|Win32.Build.0 = Debug|Win32
+		{414519FC-F67E-43C1-8B65-AC1442E8D3FF}.Release|Win32.ActiveCfg = Release|Win32
+		{414519FC-F67E-43C1-8B65-AC1442E8D3FF}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
