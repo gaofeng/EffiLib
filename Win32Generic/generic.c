@@ -4,11 +4,14 @@
 #include "resource.h" //内含各个 resource IDs
 #include "generic.h"
 
+#include "DBWindow.h"
+
 HINSTANCE _hInst;	// Instance handle
 HWND 	  _hWnd;
 
 char _szAppName[] = "Generic";	//程序名称
 char _szTitle[]   = "Generic Sample Application";	//窗口标题
+
 /*
 this message loop retrieves messages from the thread's message queue and 
 dispatches them to the appropriate window procedures.
@@ -34,7 +37,7 @@ int CALLBACK WinMain(HINSTANCE hInstance,
 		wc.hInstance = hInstance;
 		wc.hIcon = NULL;//LoadIcon(hInstance, "jjhouricon");
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wc.hbrBackground = GetStockObject(WHITE_BRUSH);	//窗口背景颜色
+		wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);	//窗口背景颜色
 		wc.lpszMenuName = "GenericMenu";
 		wc.lpszClassName = _szAppName;
 
@@ -65,6 +68,8 @@ int CALLBACK WinMain(HINSTANCE hInstance,
     // the application.
 	if (!_hWnd)
 		return (FALSE);
+
+	DBWindowTile("Debug Console");
 
 	//Show the window and paint its contents.
 	ShowWindow(_hWnd, nCmdShow);	//显示窗口
@@ -97,6 +102,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
 
 			switch (wmId) {
 				case IDM_ABOUT:
+					DBWindowWrite("About");
  					DialogBox(_hInst,         // Winmain第一个参数，应用程序的实例句柄
                     	      "AboutBox",     // 对话框资源名称
                         	  hWnd,           // 父窗口
