@@ -17,3 +17,4 @@ ipch
 /lua_scripts/exec.dll
 /lua_scripts/intelHex.dll
 /lua_scripts/EncodeConvert.dll
+lib
