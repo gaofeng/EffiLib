@@ -228,17 +228,36 @@ ValueTest::checkIs( const Json::Value &value, const IsCheck &check )
 
 
 
+// int main( int argc, const char *argv[] )
+// {
+//    JsonTest::Runner runner;
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, size );
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isObject );
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isArray );
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isBool );
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isInt );
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isUInt );
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isDouble );
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isString );
+//    JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isNull );
+//    return runner.runCommandLine( argc, argv );
+// }
+
 int main( int argc, const char *argv[] )
 {
-   JsonTest::Runner runner;
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, size );
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isObject );
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isArray );
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isBool );
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isInt );
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isUInt );
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isDouble );
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isString );
-   JSONTEST_REGISTER_FIXTURE( runner, ValueTest, isNull );
-   return runner.runCommandLine( argc, argv );
+	Json::Value root;  
+	Json::Value arrayObj;  
+	Json::Value item;  
+	item["cpp"] = "jsoncpp";  
+	item["java"] = "jsoninjava";  
+	item["php"] = "support";  
+	arrayObj.append(item);  
+	root["name"] = "json";  
+	root["array"] = arrayObj;
+	root["ÐÕÃû"] = "¸ß·å";
+	root.toStyledString();  
+	std::string out= root.toStyledString();  
+	Json::FastWriter fast_writer;
+	std::cout << fast_writer.write(root) << std::endl;
+	std::cout <<out<<std::endl;  
 }
