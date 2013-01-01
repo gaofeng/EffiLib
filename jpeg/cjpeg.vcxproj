@@ -13,7 +13,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
@@ -59,10 +59,12 @@
     <ClInclude Include="jmorecfg.h" />
     <ClInclude Include="jpeglib.h" />
     <ClInclude Include="jversion.h" />
+    <ClInclude Include="libcjpeg.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cdjpeg.c" />
     <ClCompile Include="cjpeg.c" />
+    <ClCompile Include="libcjpeg.c" />
     <ClCompile Include="rdbmp.c" />
     <ClCompile Include="rdgif.c" />
     <ClCompile Include="rdppm.c" />
